@@ -32,7 +32,16 @@ print("Finding Restaurants for postcode EC3N 4DJ...")
  
  
  */
+struct API_Response: Decodable{
+    let restaurant: [Restaurant]
+}
 
+struct Restaurant: Decodable{
+    let name: String
+    let cuisine: String
+    let rating: Double
+    let address: String
+}
 
 
 //finding restaurants from api
