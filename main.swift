@@ -63,11 +63,14 @@ struct Address: Decodable {
 
 
 //finding restaurants from api and fetching them
-func fetching_Restaurants(postcode: String, completion: @escaping Result<[Restaurant], Error) -> Void) {
-    let url_string = "https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/\(postcode)"
-    guard let url = URL(string: url_string)
+func fetching_Restaurants(postcode: String, completion: @escaping (Result<[Restaurant], Error>) -> Void) {
+    let url_string = "https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/\(postcode)"//\(postcode)
+    guard let url = URL(string: url_string) else {
+        let error = NSError(domain: "Error Domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "URL: \(url_string) not valid."])
+        completion(.failure(error))
         return
     }
+}
 
 
 
