@@ -33,14 +33,28 @@ print("Finding Restaurants for postcode EC3N 4DJ...")
  
  */
 struct API_Response: Decodable{
-    let restaurant: [Restaurant]
+    let restaurant: [Restaurant] //array of restaurants
 }
 
 struct Restaurant: Decodable{
     let name: String
-    let cuisine: String
-    let rating: Double
-    let address: String
+    let cuisines: [Cuisine]//array of cuisines
+    let rating: Rating
+    let address: Address
+}
+
+struct Cuisine: Decodable{
+    let cuisine_name: String
+}
+
+struct Rating: Decodable{
+    let rating_number: Double?//'?' optional if doesnt exist so no crashing
+}
+
+struct Address: Decodable{
+    let first_line = String?
+    let city_name = String?
+    let post_code = String?
 }
 
 
