@@ -117,8 +117,8 @@ fetching_Restaurants(postcode: postcode) { (result) in
     print("fetching functiong being called")
     switch result {
     case .success(let restaurants):
-        for restaurant in restaurants {
-            print("==========Restaurant Information==========")
+        for restaurant in restaurants.prefix(10) {
+            print("==========Restaurant Information ==========")
             print("Restaurant name: \(restaurant.name)")
             print("Cuisine: \(restaurant.cuisines)")
             print("Rating: \(restaurant.rating)")
