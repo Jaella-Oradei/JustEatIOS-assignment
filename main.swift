@@ -113,20 +113,18 @@ func fetching_Restaurants(postcode: String, completion: @escaping (Result<[Resta
 
 let postcode = "EC3N4DJ"
 
-fetching_Restaurants(postcode: postcode) {
-    (result) in
-    switch result { case.success(let restaurants):
-        //if restaurants.isEmpty {
-        // print(" No restaurants were found for your postcode search: \(postcode)")
-        // } else{
+fetching_Restaurants(postcode: postcode) { (result) in
+    print("fetching functiong being called")
+    switch result {
+    case .success(let restaurants):
         for restaurant in restaurants {
             print("==========Restaurant Information==========")
             print("Restaurant name:\n \(restaurant.name)")
-            
-            
         }
-    } case .failure(let error):
-    print("Error \(error.localizedDescription)")
+        
+    case .failure(let error):
+        print("Error \(error.localizedDescription)")
+    }
 }
- */
+ 
 
