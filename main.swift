@@ -6,9 +6,10 @@
 import Foundation
 
 //indicating to user that the program has started running and the restaurants are being searched.
-print("Program has started...")
-print("**************************************************")
-print("Finding Restaurants for postcode EC3N 4DJ...")
+print()
+print("                          Program has started...\n")
+print("             ***************************************************")
+print("                Finding Restaurants for postcode EC3N 4DJ...\n")
 
 
 
@@ -37,7 +38,7 @@ print("Finding Restaurants for postcode EC3N 4DJ...")
  */
 
 struct API_Response: Decodable {
-    let restaurant: [Restaurant] //array of restaurants
+    let restaurants: [Restaurant] //array of restaurants
 }
 
 struct Restaurant: Decodable {
@@ -63,13 +64,49 @@ struct Address: Decodable {
 
 
 //finding restaurants from api and fetching them
+/*
+ -----------------------------------------------------------------
+    > function fetching_Restaurants to fetch for the restaurants within api
+    > parameter postcode of type string when fucntion called, it needs string to be entered
+    > variable url of type URL so if its not url, it is incorrect
+    > variable URL_error or type NSError for personalising the error message
+-------------------------
+    >
+ */
 func fetching_Restaurants(postcode: String, completion: @escaping (Result<[Restaurant], Error>) -> Void) {
-    let url_string = "https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/\(postcode)"//\(postcode)
-    guard let url = URL(string: url_string) else {
-        let error = NSError(domain: "Error Domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "URL: \(url_string) not valid."])
-        completion(.failure(error))
-        return
+    let url_string = "https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/\(postcode)"// url link path being set as url_string
+    guard let url = URL(string: url_string) else {//trying to create valid url object from url_string given.
+        let URL_Error = NSError(domain: "Error URL Domain", code: 01, userInfo: [NSLocalizedDescriptionKey: "URL: \(url_string) not valid."])// if url_string is not valid, outout error message(custom) with NSError function. Code: 0 as first error message
+        completion(.failure(URL_Error))//completion closure with a failure result as url not valid
+        return//exit function
     }
+    
+    //creating network task
+    let network_Task = URLSession.shared.dataTask(with: url){data, response, error in//closure will response in format of data, response, error in.. when ran
+        if let task_Error = error {
+            completion(.failure(task_Error))//checks if error happened, if not, continue, if yes, completion goes into failure and ends.
+            return
+        }
+        
+       //retrieving data from the server
+        guard let raw_Data = data else {
+            let data_Error = NSError(domain: "Error Session Data", code: 02, userInfo: [NSLocalizedDescriptionKey: "Data not recived"])// if the data is not present, error message with NSError and error code token 02 as its seconf error message
+            completion(.failure(data_Error))//calls to completion of failure then stops running
+            return
+        }
+        //decoding the raw JSON data into the custom swift type which is set up in API_Response
+    do{
+        let response_Decoded = try JSONDecoder().decode(API_Response.self, from: raw_Data)
+            completion(.success(response_Decoded.restaurants))//if all goes well, comletion is a success, sends it back into the format of the response_decoded.
+            
+    }catch{
+        print("Error Decoding: \(error)")
+        completion(.failure(error))//however, if JSON doesnt match the swift format then it calls completion to failure and stops
+    }
+        
+    }
+    
+    network_Task.resume()// allows for network task to begin running request or it doesnt work.
 }
 
 
