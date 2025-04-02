@@ -57,7 +57,7 @@ struct Rating: Decodable {
 }
 
 struct Address: Decodable {
-    let firstline: String?
+    let firstLine: String?
     let city: String?
     let postalCode: String?
 }
@@ -120,9 +120,9 @@ fetching_Restaurants(postcode: postcode) { (result) in
         for restaurant in restaurants.prefix(10) {
             print("==========Restaurant Information ==========")
             print("Restaurant name: \(restaurant.name)")
-            print("Cuisine: \(restaurant.cuisines)")
-            print("Rating: \(restaurant.rating)")
-            print("Address: \(restaurant.address)")
+            print("Cuisine: \(restaurant.cuisines.map {$0.name}.joined(separator: ", "))")
+            print("Rating: \(restaurant.rating.starRating.map { String(format: "%.1f", $0) } ?? "N/A")")
+            print("Address: \(restaurant.address.firstLine ?? "N/A"), \(restaurant.address.city ?? "N/A"), \(restaurant.address.postalCode ?? "N/A")")
         }
         
     case .failure(let error):
