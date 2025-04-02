@@ -49,17 +49,17 @@ struct Restaurant: Decodable {
 }
 
 struct Cuisine: Decodable {
-    let cuisine_name: String
+    let name: String //must keep variables same as JSON
 }
 
 struct Rating: Decodable {
-    let rating_number: Double?//'?' optional if doesnt exist so no crashing
+    let starRating: Double?//'?' optional if doesnt exist so no crashing
 }
 
 struct Address: Decodable {
-    let first_line: String?
-    let city_name: String?
-    let post_code: String?
+    let firstline: String?
+    let city: String?
+    let postalCode: String?
 }
 
 
@@ -126,5 +126,7 @@ fetching_Restaurants(postcode: postcode) { (result) in
         print("Error \(error.localizedDescription)")
     }
 }
+
+RunLoop.main.run()
  
 
