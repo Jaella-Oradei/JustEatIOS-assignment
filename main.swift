@@ -119,7 +119,10 @@ fetching_Restaurants(postcode: postcode) { (result) in
     case .success(let restaurants):
         for restaurant in restaurants {
             print("==========Restaurant Information==========")
-            print("Restaurant name:\n \(restaurant.name)")
+            print("Restaurant name: \(restaurant.name)")
+            print("Cuisine: \(restaurant.cuisines)")
+            print("Rating: \(restaurant.rating)")
+            print("Address: \(restaurant.address)")
         }
         
     case .failure(let error):
