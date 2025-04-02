@@ -90,7 +90,7 @@ func fetching_Restaurants(postcode: String, completion: @escaping (Result<[Resta
         
        //retrieving data from the server
         guard let raw_Data = data else {
-            let data_Error = NSError(domain: "Error Session Data", code: 02, userInfo: [NSLocalizedDescriptionKey: "Data not recived"])// if the data is not present, error message with NSError and error code token 02 as its seconf error message
+            let data_Error = NSError(domain: "Error Session Data", code: 02, userInfo: [NSLocalizedFailureErrorKey: "Data was not recived unfortunately, Please check JSON formatting"])// if the data is not present, error message with NSError and error code token 02 as its seconf error message- used NSLocalizedFailureErrorKey for more description on error
             completion(.failure(data_Error))//calls to completion of failure then stops running
             return
         }
@@ -109,8 +109,24 @@ func fetching_Restaurants(postcode: String, completion: @escaping (Result<[Resta
     network_Task.resume()// allows for network task to begin running request or it doesnt work.
 }
 
-
-
-
-
 //printing top 10 restaurants with attributes (cusinine, rating & address)
+
+let postcode = "EC3N4DJ"
+
+fetching_Restaurants(postcode: postcode) {
+    (result) in
+    switch result { case.success(let restaurants):
+        //if restaurants.isEmpty {
+        // print(" No restaurants were found for your postcode search: \(postcode)")
+        // } else{
+        for restaurant in restaurants {
+            print("==========Restaurant Information==========")
+            print("Restaurant name:\n \(restaurant.name)")
+            
+            
+        }
+    } case .failure(let error):
+    print("Error \(error.localizedDescription)")
+}
+ */
+
