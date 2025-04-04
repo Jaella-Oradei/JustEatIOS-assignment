@@ -7,9 +7,9 @@ import Foundation
 
 //indicating to user that the program has started running and the restaurants are being searched.
 print()
-print("                          Program has started...\n")
-print("             ***************************************************")
-print("                Finding Restaurants for postcode EC3N 4DJ...\n")
+print("                                                         Program has started...\n")
+print("                                *********************************************************************** \n")
+print("                                                          Restaurants Finder \n")
 
 
 
@@ -73,6 +73,12 @@ struct Address: Decodable {
 -------------------------
     >
  */
+
+var postcode: String = ""
+let left_indent = "               "
+let middle_indent = "               "
+let right_indent = "                                     "
+
 func fetching_Restaurants(postcode: String, completion: @escaping (Result<[Restaurant], Error>) -> Void) {
     let url_string = "https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/\(postcode)"// url link path being set as url_string
     guard let url = URL(string: url_string) else {//trying to create valid url object from url_string given.
@@ -111,25 +117,43 @@ func fetching_Restaurants(postcode: String, completion: @escaping (Result<[Resta
 
 //printing top 10 restaurants with attributes (cusinine, rating & address)
 
-let postcode = "EC3N4DJ"
+postcode = "EC3N4DJ"
+func print_Restaurant(_ restaurant: Restaurant, index: Int){
+    
+    let restaurant_Name = restaurant.name
+    let cuisines_names = restaurant.cuisines.map {$0.name}.joined(separator: ", ")
+    let restaurant_rating = restaurant.rating.starRating.map { String(format: "%.1f", $0) } ?? "N/A"
+    let first_line = restaurant.address.firstLine ?? "N/A"
+    let city_name = restaurant.address.city ?? "N/A"
+    let postal_code = restaurant.address.postalCode ?? "N/A"
+                                                                  
 
+    print(left_indent,"╔═════════════════════════════════════════════════════════════════════════════════════════════╗")
+    print(middle_indent,"║\(right_indent) Restaurant Info \(index + 1)\(right_indent) ║")
+    print(left_indent,"╠═════════════════════════════════════════════════════════════════════════════════════════════╣")
+    print(left_indent,"║ 🍽 Restaurant : \(restaurant_Name)")
+    print(left_indent,"║ 🥘 Cuisine   : \(cuisines_names)")
+    print(left_indent,"║ 🌟 Rating    : \(restaurant_rating)")
+    print(left_indent,"║ 📍 Address   : \(first_line)\(city_name)\(postal_code)")
+    print(left_indent,"╚═════════════════════════════════════════════════════════════════════════════════════════════╝\n")
+}
+
+//let formatter
 fetching_Restaurants(postcode: postcode) { (result) in
-    print("fetching functiong being called")
+    
     switch result {
     case .success(let restaurants):
-        for restaurant in restaurants.prefix(10) {
-            print("==========Restaurant Information ==========")
-            print("Restaurant name: \(restaurant.name)")
-            print("Cuisine: \(restaurant.cuisines.map {$0.name}.joined(separator: ", "))")
-            print("Rating: \(restaurant.rating.starRating.map { String(format: "%.1f", $0) } ?? "N/A")")
-            print("Address: \(restaurant.address.firstLine ?? "N/A"), \(restaurant.address.city ?? "N/A"), \(restaurant.address.postalCode ?? "N/A")")
+ 
+        for (index, restaurant) in restaurants.prefix(10).enumerated(){
+            print_Restaurant(restaurant, index: index)
         }
+       
+        print("                            ******************************************************************** \n")
         
     case .failure(let error):
         print("Error \(error.localizedDescription)")
     }
 }
-
 RunLoop.main.run()
  
 
