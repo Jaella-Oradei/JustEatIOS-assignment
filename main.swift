@@ -74,11 +74,6 @@ struct Address: Decodable {
     >
  */
 
-var postcode: String = ""
-let left_indent = "               "
-let middle_indent = "               "
-let right_indent = "                                     "
-
 func fetching_Restaurants(postcode: String, completion: @escaping (Result<[Restaurant], Error>) -> Void) {
     let url_string = "https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/\(postcode)"// url link path being set as url_string
     guard let url = URL(string: url_string) else {//trying to create valid url object from url_string given.
@@ -118,6 +113,11 @@ func fetching_Restaurants(postcode: String, completion: @escaping (Result<[Resta
 //printing top 10 restaurants with attributes (cusinine, rating & address)
 
 postcode = "EC3N4DJ"
+var postcode: String = ""
+let left_indent = "               "
+let middle_indent = "               "
+let right_indent = "                                     "
+
 func print_Restaurant(_ restaurant: Restaurant, index: Int){
     
     let restaurant_Name = restaurant.name
