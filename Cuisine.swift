@@ -2,7 +2,7 @@
 /*
  DECODING RESPOSNE FOR (API)
  - Struct Cuisine
-    > variable cusine_name of type string
+    > constant variable cusine_name of type string that is immutable
  
  */
 struct Cuisine: Decodable {
