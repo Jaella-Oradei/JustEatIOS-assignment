@@ -3,10 +3,13 @@ import Foundation
 class RestaurantFinder {
     
     func start() {
-        print()
-        print("                                                         🛠️  Program has started... 🛠️\n")
-        print("                                *********************************************************************** \n")
-        print("                                                          🧾 Restaurants Finder 🧾 \n")
+        print("\u{001B}[8;54;125t") //resizes terminal to run how desired
+        //print()
+        let indent_title = "                                                   "
+        let spacing = "                                "
+        print("\n\(indent_title)🛠️  Program has started... 🛠️\n")
+        print("\(spacing)*********************************************************************** \n")
+        print("\(indent_title) 🧾 Restaurants Finder 🧾 \n")
         
         //postcode of choice.
         let postal_code = "EC3N4DJ"
@@ -25,7 +28,7 @@ class RestaurantFinder {
                         self.print_Restaurant(restaurant, index: index)
                     }
                    
-                    print("                                  ******************************************************************** \n")
+                    print("\(spacing)s ******************************************************************* \n")
                     
                 case .failure(let error):
                     print("Error \(error.localizedDescription)")
@@ -98,26 +101,17 @@ class RestaurantFinder {
         print(left_indent,"║ 🍽 Restaurant : \(restaurant_Name)")
         print(left_indent,"║ 🥘 Cuisine   : \(cuisines_names)")
         print(left_indent,"║ 🌟 Rating    : \(restaurant_rating)")
-        print(left_indent,"║ 📍 Address   : \(first_line)\(city_name)\(postal_code)")
+        print(left_indent,"║ 📍 Address   : \(first_line), \(city_name), \(postal_code)")
         print(left_indent,"╚═════════════════════════════════════════════════════════════════════════════════════════════╝\n")
     }
-
-/*    //let formatter
-fetching_Restaurants(postcode: postcode) { (result) in
-        
-        switch result {
-        case .success(let restaurants):
-     
-            for (index, restaurant) in restaurants.prefix(10).enumerated(){
-                print_Restaurant(restaurant, index: index)
-            }
-           
-            print("                            ******************************************************************** \n")
-            
-        case .failure(let error):
-            print("Error \(error.localizedDescription)")
+/*
+    func save_File(_ output: String, file_name: String = "Restaurant_Finds.txt") {
+        do {
+            try output.write(to: file_URL, atomically: true, encoding: .utf8)
+            print(
         }
     }
-*/
+ 
+ */
 }
 

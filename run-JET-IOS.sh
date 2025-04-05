@@ -6,4 +6,4 @@ printf 'e\[8;125;54t'
 
 echo "Resizing terminal for optimal display & running program"
 
-Swift run
+Swift main.swift
