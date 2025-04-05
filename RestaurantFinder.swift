@@ -9,7 +9,7 @@ class RestaurantFinder {
         print("                                                          🧾 Restaurants Finder 🧾 \n")
         
         //postcode of choice.
-        let postal_code = "EN14JL"
+        let postal_code = "EC3N4DJ"
         
         //calling function that fetching restauranta from api endpoint
         fetching_Restaurants(postcode: postal_code) { (result) in
@@ -17,10 +17,11 @@ class RestaurantFinder {
                 switch result {
                 case .success(let restaurants):
              
-                    let ranked_restaurants = restaurants.sorted {
-                        ($0.rating.starRating ?? 0.0) > ($1.rating.starRating ?? 0.0)
+                    let alphabetical_order = restaurants.sorted {
+                        $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
                     }
-                    for (index, restaurant) in rank_restaurants.prefix(10).enumerated(){
+                    
+                    for (index, restaurant) in alphabetical_order.prefix(10).enumerated(){
                         self.print_Restaurant(restaurant, index: index)
                     }
                    
