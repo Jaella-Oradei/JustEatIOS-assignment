@@ -13,6 +13,7 @@ class RestaurantFinder {
         
         //postcode of choice.
         let postal_code = "EC3N4DJ"
+        //self.save_File(output, postcode: postal_code)
         
         //calling function that fetching restauranta from api endpoint
         fetching_Restaurants(postcode: postal_code) { (result) in
@@ -21,14 +22,19 @@ class RestaurantFinder {
                 case .success(let restaurants):
              
                     let alphabetical_order = restaurants.sorted {
-                        $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+                        $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending//ordering the results alphabetically
+                    }
+                    var output = ""
+                    for (index, restaurant) in alphabetical_order.prefix(10).enumerated(){
+                        //self.print_Restaurant(restaurant, index: index)
+                        let infomation = self.print_Restaurant(restaurant, index: index)//calling function of printed results and passing variables index for counting and restaurant
+                        print(infomation)//printing for temrinal too.
+                        output += infomation + "\n"
                     }
                     
-                    for (index, restaurant) in alphabetical_order.prefix(10).enumerated(){
-                        self.print_Restaurant(restaurant, index: index)
-                    }
+                    self.save_File(output, postcode: postal_code)//calling func for saving the results into a .txt file
                    
-                    print("\(spacing)s ******************************************************************* \n")
+                    print("\(spacing) ******************************************************************* \n")
                     
                 case .failure(let error):
                     print("Error \(error.localizedDescription)")
@@ -76,10 +82,8 @@ class RestaurantFinder {
     }
 
     //printing top 10 restaurants with attributes (cusinine, rating & address)
-    
-  
-
-   private func print_Restaurant(_ restaurant: Restaurant, index: Int){
+    //creating a private function that returns a variable of type string
+   private func print_Restaurant(_ restaurant: Restaurant, index: Int) -> String {
         
         
         //var postcode: String = ""
@@ -93,25 +97,49 @@ class RestaurantFinder {
         let first_line = restaurant.address.firstLine ?? "N/A"
         let city_name = restaurant.address.city ?? "N/A"
         let postal_code = restaurant.address.postalCode ?? "N/A"
-                                                                      
+             
+       //constant variable of the formatted output in both temrninal(console) and .txt file
+       let information = """
+        \(left_indent)    ╔═════════════════════════════════════════════════════════════════════════════════════════════╗
+            \(middle_indent)║\(right_indent)🧾 Restaurant Info \(index + 1)\(right_indent) ║
+            \(left_indent)╠═════════════════════════════════════════════════════════════════════════════════════════════╣
+            \(left_indent)║ 🍽 Restaurant : \(restaurant_Name)
+            \(left_indent)║ 🥘 Cuisine   : \(cuisines_names)
+            \(left_indent)║ 🌟 Rating    : \(restaurant_rating)
+            \(left_indent)║ 📍 Address   : \(first_line) \(city_name) \(postal_code)
+            \(left_indent)╚═════════════════════════════════════════════════════════════════════════════════════════════╝\n
+        """
 
-        print(left_indent,"╔═════════════════════════════════════════════════════════════════════════════════════════════╗")
-        print(middle_indent,"║\(right_indent)🧾 Restaurant Info \(index + 1)\(right_indent) ║")
-        print(left_indent,"╠═════════════════════════════════════════════════════════════════════════════════════════════╣")
-        print(left_indent,"║ 🍽 Restaurant : \(restaurant_Name)")
-        print(left_indent,"║ 🥘 Cuisine   : \(cuisines_names)")
-        print(left_indent,"║ 🌟 Rating    : \(restaurant_rating)")
-        print(left_indent,"║ 📍 Address   : \(first_line), \(city_name), \(postal_code)")
-        print(left_indent,"╚═════════════════════════════════════════════════════════════════════════════════════════════╝\n")
+       return information//returns information
     }
-/*
-    func save_File(_ output: String, file_name: String = "Restaurant_Finds.txt") {
+
+    //saving results to .txt file. requires postcode for the making it unique file name based on postcode for user to know which postcode had which results.
+    func save_File(_ output: String, postcode: String) {
+
+        let file_name = "Restaurant_Finder_\(postcode).txt"
+        let save_in_Folder = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Desktop")
+        let file_URL = save_in_Folder.appendingPathComponent(file_name)//saving file to directory path
+        
+        
         do {
             try output.write(to: file_URL, atomically: true, encoding: .utf8)
-            print(
-        }
+            print( "\n Restaurant results are also saved to file: \(file_URL.path)\n")//lets user know where to find saved .txt file.
+            
+        } catch {
+                    print("Couldnt write the resutls to file.")
+            }
     }
  
- */
+
 }
 
+          /*
+           print(left_indent,"╔═════════════════════════════════════════════════════════════════════════════════════════════╗")
+           print(middle_indent,"║\(right_indent)🧾 Restaurant Info \(index + 1)\(right_indent) ║")
+           print(left_indent,"╠═════════════════════════════════════════════════════════════════════════════════════════════╣")
+           print(left_indent,"║ 🍽 Restaurant : \(restaurant_Name)")
+           print(left_indent,"║ 🥘 Cuisine   : \(cuisines_names)")
+           print(left_indent,"║ 🌟 Rating    : \(restaurant_rating)")
+           print(left_indent,"║ 📍 Address   : \(first_line), \(city_name), \(postal_code)")
+           print(left_indent,"╚═════════════════════════════════════════════════════════════════════════════════════════════╝\n")
+           */
