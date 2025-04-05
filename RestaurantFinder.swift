@@ -3,21 +3,21 @@ import Foundation
 class RestaurantFinder {
     
     func start() {
-        print("\u{001B}[8;54;125t") //resizes terminal to run how desired
-        //print()
+        print("\u{001B}[8;54;128t") //resizes terminal to run how desired
+        //indentation for format and views of output to improve readbility of code.
         let indent_title = "                                                   "
         let spacing = "                                "
         print("\n\(indent_title)🛠️  Program has started... 🛠️\n")
-        print("\(spacing)*********************************************************************** \n")
+        print("\(spacing)*********************************************************************** \n")//start of the program. for terminal only.
         print("\(indent_title) 🧾 Restaurants Finder 🧾 \n")
         
-        //postcode of choice.
+        //postcode of choice which restaurants are found from.
         let postal_code = "EC3N4DJ"
-        //self.save_File(output, postcode: postal_code)
         
-        //calling function that fetching restauranta from api endpoint
+        
+        //calling function that fetches restaurants from api endpoint
         fetching_Restaurants(postcode: postal_code) { (result) in
-                
+                //if the result is success, alphabetically order the results in asceding order and set constant variable information to be printed.
                 switch result {
                 case .success(let restaurants):
              
@@ -32,10 +32,13 @@ class RestaurantFinder {
                         output += infomation + "\n"
                     }
                     
-                    self.save_File(output, postcode: postal_code)//calling func for saving the results into a .txt file
+                    //saves the content that is now output by calling function that writes it into external .txt file
+                    self.save_File(output, postcode: postal_code)//postcode is used to make unique file name and know which results are for what postcode.
                    
-                    print("\(spacing) ******************************************************************* \n")
                     
+                    print("\(spacing) ******************************************************************* \n")//improve visuals of printed information
+                    
+                    //if failed, print the error messave from localizedDescription
                 case .failure(let error):
                     print("Error \(error.localizedDescription)")
                 }
@@ -43,6 +46,7 @@ class RestaurantFinder {
             }
         
     }
+    
     
     func fetching_Restaurants(postcode: String, completion: @escaping (Result<[Restaurant], Error>) -> Void) {
         let url_string = "https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/\(postcode)"// url link path being set as url_string
@@ -72,7 +76,7 @@ class RestaurantFinder {
                 completion(.success(response_Decoded.restaurants))//if all goes well, comletion is a success, sends it back into the format of the response_decoded.
                 
         }catch{
-            print("Error Decoding: \(error)")
+            print(" 🚫  Error Decoding: \(error)")
             completion(.failure(error))//however, if JSON doesnt match the swift format then it calls completion to failure and stops
         }
             
@@ -80,6 +84,12 @@ class RestaurantFinder {
         
         network_Task.resume()// allows for network task to begin running request or it doesnt work.
     }
+    
+    /*
+    - retrieves the results of the attributes attached to each restaurant.
+     - indentation variables(right_indent, middle_indent, left_indent) to clean up the spacing and improve readability
+     
+     */
 
     //printing top 10 restaurants with attributes (cusinine, rating & address)
     //creating a private function that returns a variable of type string
@@ -92,11 +102,11 @@ class RestaurantFinder {
         let right_indent = "                                    "
        
         let restaurant_Name = restaurant.name
-        let cuisines_names = restaurant.cuisines.map {$0.name}.joined(separator: ", ")
+        let cuisines_names = restaurant.cuisines.map {$0.name}.joined(separator: ", ")//each retrieved data for cuisine seperated by commas
         let restaurant_rating = restaurant.rating.starRating.map { String(format: "%.1f", $0) } ?? "N/A"
-        let first_line = restaurant.address.firstLine ?? "N/A"
-        let city_name = restaurant.address.city ?? "N/A"
-        let postal_code = restaurant.address.postalCode ?? "N/A"
+        let first_line = restaurant.address.firstLine ?? "N/A"//"N/A" if the result is nil, it doesnt crash
+        let city_name = restaurant.address.city ?? "N/A"//"N/A" if the result is nil, it doesnt crash
+        let postal_code = restaurant.address.postalCode ?? "N/A"//"N/A" if the result is nil, it doesnt crash
              
        //constant variable of the formatted output in both temrninal(console) and .txt file
        let information = """
@@ -123,34 +133,27 @@ class RestaurantFinder {
      */
     func save_File(_ output: String, postcode: String) {
 
+        //creates a date time format to create a unique timestamp
         let date_format = DateFormatter()
         date_format.dateFormat = "yyyy-MM-dd_HH-mm-ss"//
         let date_time = date_format.string(from: Date())
         
+        //creating a dynamic filename using the postcode and timestamp
         let file_name = "Restaurant_Finder_\(postcode)_\(date_time).txt"
+        
+        //defining the destination path of the file in desktop.
         let save_in_Folder = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Desktop")
         let file_URL = save_in_Folder.appendingPathComponent(file_name)//saving file to directory path
         
-        
+        //writing the output to the specified file name.
         do {
             try output.write(to: file_URL, atomically: true, encoding: .utf8)
-            print( "\n Restaurant results are also saved to file: \(file_URL.path)\n")//lets user know where to find saved .txt file.
-            
+            print( "\n 🧾 Restaurant results are also saved to file: \(file_URL.path)\n")//lets user know where to find saved .txt file.
+            //handling errors that can occfur when writing to the file.
         } catch {
-                    print("Couldnt write the resutls to file.")
+                    print("❌ Couldn't write the contents to the .txt. file.")
             }
     }
  
 
 }
-
-          /*
-           print(left_indent,"╔═════════════════════════════════════════════════════════════════════════════════════════════╗")
-           print(middle_indent,"║\(right_indent)🧾 Restaurant Info \(index + 1)\(right_indent) ║")
-           print(left_indent,"╠═════════════════════════════════════════════════════════════════════════════════════════════╣")
-           print(left_indent,"║ 🍽 Restaurant : \(restaurant_Name)")
-           print(left_indent,"║ 🥘 Cuisine   : \(cuisines_names)")
-           print(left_indent,"║ 🌟 Rating    : \(restaurant_rating)")
-           print(left_indent,"║ 📍 Address   : \(first_line), \(city_name), \(postal_code)")
-           print(left_indent,"╚═════════════════════════════════════════════════════════════════════════════════════════════╝\n")
-           */

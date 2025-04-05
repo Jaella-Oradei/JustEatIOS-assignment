@@ -2,10 +2,11 @@
 /*
  DECODING RESPOSNE FOR (API)
  - Struct Restaurant
-    > variable name of type string
-    > variable cuisines of type Cuisine in array format as there will be multiple cuisines
-    > variable rating of type Ratings
-    > variable address of type Address
+    - constant variables:
+    > variable name: of type string
+    > variable cuisines: of type Cuisine in array format as there will be multiple cuisines
+    > variable rating: of type Ratings
+    > variable address: of type Address
 
  */
 
