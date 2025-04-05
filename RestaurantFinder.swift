@@ -114,9 +114,20 @@ class RestaurantFinder {
     }
 
     //saving results to .txt file. requires postcode for the making it unique file name based on postcode for user to know which postcode had which results.
+    /*
+     - Saves the restaurants results that comes from the passed parameter "output" and uniquely saves tp .txt file.
+        - parameters:
+            >output: a String type variable that is going to be written to the .txt file
+            >postcode: the postcode that will be provided for where to fetch restaurant details from to know which postr
+     
+     */
     func save_File(_ output: String, postcode: String) {
 
-        let file_name = "Restaurant_Finder_\(postcode).txt"
+        let date_format = DateFormatter()
+        date_format.dateFormat = "yyyy-MM-dd_HH-mm-ss"//
+        let date_time = date_format.string(from: Date())
+        
+        let file_name = "Restaurant_Finder_\(postcode)_\(date_time).txt"
         let save_in_Folder = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Desktop")
         let file_URL = save_in_Folder.appendingPathComponent(file_name)//saving file to directory path
         
