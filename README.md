@@ -22,17 +22,17 @@
             > ./main.swift
         > The restaurant finder program  will run: 
         
-               🛠️  Program has started... 🛠️
+                   🛠️  Program has started... 🛠️
 
-*********************************************************************** 
+      *********************************************************************** 
 
-                 🧾 Restaurants Finder 🧾 
+                    🧾 Restaurants Finder 🧾 
         
         and that is how you will know thr program has begun running
     
 
 
-#Assessment criteria outline:
+# Assessment criteria outline:
     > The Problem:
     - We are looking for you to find restaurant data and return this in an interface of your choice. Using the API provided you will need to send a postcode to return a set of data, you’ll need to filter this data to focus just on the restaurant data. You will notice that a lot of data is returned in the ‘restaurant object’ (and in the whole response!), we’re only interested in the following pieces of data being returned:
             > Name
