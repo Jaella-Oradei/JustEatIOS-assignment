@@ -4,7 +4,7 @@ import Foundation
 //function called main that creates instance of the RestaurantFinder class as finder.
     //- finder is then calling the start function method from that class which has all the fucntionality of the program
 func main() {
-    print("\u{001B}[8;54;128t")//resizes terminal to run how desired
+    print("\u{001B}[8;54;135t")//resizes terminal to run how desired
     //indentation for format and views of output to improve readbility of code.
     //indentation for format and views of output to improve readbility of code.
     let indent_title = "                                                   "

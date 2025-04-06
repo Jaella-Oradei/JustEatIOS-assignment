@@ -9,7 +9,7 @@ class RestaurantFinder {
      - fetching restaurant data
      */
     func start(postal_code: String) {
-        print("\u{001B}[8;54;128t") //resizes terminal to run how desired
+        print("\u{001B}[8;54;135t") //resizes terminal to run how desired
         //indentation for format and views of output to improve readbility of code.
         let indent_title = "                                                   "
         let spacing = "                                "
@@ -165,7 +165,7 @@ class RestaurantFinder {
         //writing the output to the specified file name.
         do {
             try output.write(to: file_URL, atomically: true, encoding: .utf8)
-            print( "\n 🧾 Restaurant results are also saved to file: \(file_URL.path)\n")//lets user know where to find saved .txt file.
+            print( "\n🧾 Restaurants postcode search also saved to file: \(file_URL.path)\n")//lets user know where to find saved .txt file.
             //handling errors that can occfur when writing to the file.
         } catch {
                     print("❌ Couldn't write the contents to the .txt. file.")
