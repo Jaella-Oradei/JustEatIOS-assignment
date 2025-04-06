@@ -86,7 +86,6 @@ class RestaurantFinder {
             //decoding the raw JSON data into the custom swift type which is set up in API_Response
         do{
             let response_Decoded = try JSONDecoder().decode(API_Response.self, from: raw_Data)
-            //self.print_Restaurant(response_Decoded.restaurants, index: <#T##Int#>)
                 completion(.success(response_Decoded.restaurants))//if all goes well, comletion is a success, sends it back into the format of the response_decoded.
                 
         }catch{
