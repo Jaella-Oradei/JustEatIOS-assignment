@@ -2,47 +2,70 @@ import Foundation
 
 class RestaurantFinder {
     
-    func start() {
+    /*
+     - resizing the terminal window.
+     - fetching restaurant data
+     */
+    func start(postal_code: String) {
         print("\u{001B}[8;54;128t") //resizes terminal to run how desired
         //indentation for format and views of output to improve readbility of code.
         let indent_title = "                                                   "
         let spacing = "                                "
-        print("\n\(indent_title)🛠️  Program has started... 🛠️\n")
-        print("\(spacing)*********************************************************************** \n")//start of the program. for terminal only.
-        print("\(indent_title) 🧾 Restaurants Finder 🧾 \n")
         
-        //postcode of choice which restaurants are found from.
-        let postal_code = "EC3N4DJ"
-        
-        
-        //calling function that fetches restaurants from api endpoint
+        //calling function that fetches restaurant data for the given postcode from api endpoint
         fetching_Restaurants(postcode: postal_code) { (result) in
-                //if the result is success, alphabetically order the results in asceding order and set constant variable information to be printed.
+                //sorts restaurants alphabetically by name and it is case-sensitive
                 switch result {
                 case .success(let restaurants):
              
                     let alphabetical_order = restaurants.sorted {
-                        $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending//ordering the results alphabetically
+                        $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending//ordering in ascending order
                     }
+                    
+                    //container to store all the oputput content to save to file
                     var output = ""
+                    
+                    //displaying and collecting top 10 restaurants
                     for (index, restaurant) in alphabetical_order.prefix(10).enumerated(){
-                        //self.print_Restaurant(restaurant, index: index)
-                        let infomation = self.print_Restaurant(restaurant, index: index)//calling function of printed results and passing variables index for counting and restaurant
+                        
+                        //generates the formatteed string for the restaurant
+                        let infomation = self.print_Restaurant(restaurant, index: index)
+                        
                         print(infomation)//printing for temrinal too.
-                        output += infomation + "\n"
+                        
+                        output += infomation + "\n"//append the information to the output string for file saving
                     }
                     
                     //saves the content that is now output by calling function that writes it into external .txt file
                     self.save_File(output, postcode: postal_code)//postcode is used to make unique file name and know which results are for what postcode.
                    
+                //visual separator at the end of the output in terminal
+                    print("\(spacing) ******************************************************************* \n")
                     
-                    print("\(spacing) ******************************************************************* \n")//improve visuals of printed information
+                    /*
+                     - prompts the user to see if they want search for more restaurants with different postcode
+                     - converts user input to lowercase to ensure it is case-sensitive
+                     */
+                    let user_Response = self.prompt_User("❔ Would you like to search for Restaurants with a different postcode?  [yes/y] or [no/n]").lowercased()//makesure whatever the yes or no is turned lowercase
                     
-                    //if failed, print the error messave from localizedDescription
+                    //comparing user's inputted response for yes or y to have another prompt input & no or n to end program.
+                    if user_Response == "y" || user_Response == "yes"{
+                        let new_Postal_Code = self.prompt_User("\n❔Please enter a different Postcode")
+                        //restarts the start function with new postcode
+                        self.start(postal_code: new_Postal_Code)
+                    }else {
+                        
+                        print("\n \(indent_title)Thank you for using the Restaurants Finder\n \n\(indent_title)🛠️ Ending Program...")
+                        //stops current RunLoop to end the asynchronous program.
+                        CFRunLoopStop(CFRunLoopGetCurrent())
+                        
+                    }
+                    
+                    //if failed(API REQUEST), print the error message from localizedDescription
                 case .failure(let error):
-                    print("Error \(error.localizedDescription)")
+                    print(" 🚫 Error \(error.localizedDescription)")
                 }
-            CFRunLoopStop(CFRunLoopGetCurrent())
+            CFRunLoopStop(CFRunLoopGetCurrent())//Stop current run loop to end the asynchronous execution
             }
         
     }
@@ -100,14 +123,15 @@ class RestaurantFinder {
         let left_indent = "               "
         let middle_indent = "               "
         let right_indent = "                                    "
-       
+        
         let restaurant_Name = restaurant.name
         let cuisines_names = restaurant.cuisines.map {$0.name}.joined(separator: ", ")//each retrieved data for cuisine seperated by commas
         let restaurant_rating = restaurant.rating.starRating.map { String(format: "%.1f", $0) } ?? "N/A"
         let first_line = restaurant.address.firstLine ?? "N/A"//"N/A" if the result is nil, it doesnt crash
         let city_name = restaurant.address.city ?? "N/A"//"N/A" if the result is nil, it doesnt crash
         let postal_code = restaurant.address.postalCode ?? "N/A"//"N/A" if the result is nil, it doesnt crash
-             
+            
+       
        //constant variable of the formatted output in both temrninal(console) and .txt file
        let information = """
         \(left_indent)    ╔═════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -153,6 +177,18 @@ class RestaurantFinder {
         } catch {
                     print("❌ Couldn't write the contents to the .txt. file.")
             }
+    }
+    /*
+    -function that prompts user to enter info via the terminal and validates for empty inputs by repeating until valid input is given.
+    -function retuens a string that is not empty.
+    -parameter message to display as a prompt to the user.
+     */
+    func prompt_User(_ message: String) -> String {
+        print(message, terminator: ": ")//shown at end of prompt message as a default new line
+        guard let user_Input = readLine(), !user_Input.isEmpty else {
+            return prompt_User(message)//recursive prompt if theres no value inputted.
+        }
+        return user_Input//returns a non-empty user input.
     }
  
 
