@@ -162,8 +162,11 @@ class RestaurantFinder {
         date_format.dateFormat = "yyyy-MM-dd_HH-mm-ss"//
         let date_time = date_format.string(from: Date())
         
+        //replaces the spaces in postcode to '_' to ensure correct file names
+        let removed_spacing = postcode.replacingOccurrences(of: " ", with: "_")
+        
         //creating a dynamic filename using the postcode and timestamp
-        let file_name = "Restaurant_Finder_\(postcode)_\(date_time).txt"
+        let file_name = "Restaurant_Finder_\(removed_spacing)_\(date_time).txt"
         
         //defining the destination path of the file in desktop.
         let save_in_Folder = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Desktop")
