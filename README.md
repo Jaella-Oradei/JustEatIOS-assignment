@@ -5,8 +5,10 @@ A console application that outputs the first 10 restaurants(name) it finds with 
     > Make sure you have the latest version of swift installed 
     > Clone the repository at: 
         > git clone https://github.com/Jaella-Oradei/JustEatIOS-assignment.git
-    > run the main.swift in terminal
-        > swiftc main.swift > ./main.swift
+        
+    > Running the program:
+    > Compile all the files:
+        > swiftc *.swift > ./main.swift
     > The restaurant finder program should run and output
     
     
