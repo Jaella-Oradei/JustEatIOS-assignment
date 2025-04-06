@@ -18,6 +18,13 @@ class RestaurantFinder {
                 switch result {
                 case .success(let restaurants):
              
+                    //checking to see if results are empty
+                    guard !restaurants.isEmpty else {// !restaurants.isEmpty means the list is not empty
+                        print(" ❌ No restaurants were found for the postcode: \(postal_code)")//error message that postcode doesnt exist.
+                        self.handling_search_repeat(indent_title: indent_title)//calls function to handle search repeats.
+                        return //exists start() to run rest of the code.
+                        
+                    }
                     let alphabetical_order = restaurants.sorted {
                         $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending//ordering in ascending order
                     }
@@ -38,28 +45,10 @@ class RestaurantFinder {
                     
                     //saves the content that is now output by calling function that writes it into external .txt file
                     self.save_File(output, postcode: postal_code)//postcode is used to make unique file name and know which results are for what postcode.
-                   
+                    
                 //visual separator at the end of the output in terminal
                     print("\(spacing) ******************************************************************* \n")
-                    
-                    /*
-                     - prompts the user to see if they want search for more restaurants with different postcode
-                     - converts user input to lowercase to ensure it is case-sensitive
-                     */
-                    let user_Response = self.prompt_User("❔ Would you like to search for Restaurants with a different postcode?  [yes/y] or [no/n]").lowercased()//makesure whatever the yes or no is turned lowercase
-                    
-                    //comparing user's inputted response for yes or y to have another prompt input & no or n to end program.
-                    if user_Response == "y" || user_Response == "yes"{
-                        let new_Postal_Code = self.prompt_User("\n❔Please enter a different Postcode")
-                        //restarts the start function with new postcode
-                        self.start(postal_code: new_Postal_Code)
-                    }else {
-                        
-                        print("\n \(indent_title)Thank you for using the Restaurants Finder\n \n\(indent_title)🛠️ Ending Program...")
-                        //stops current RunLoop to end the asynchronous program.
-                        CFRunLoopStop(CFRunLoopGetCurrent())
-                        
-                    }
+                    self.handling_search_repeat(indent_title: indent_title)
                     
                     //if failed(API REQUEST), print the error message from localizedDescription
                 case .failure(let error):
@@ -192,6 +181,30 @@ class RestaurantFinder {
             return prompt_User(message)//recursive prompt if theres no value inputted.
         }
         return user_Input//returns a non-empty user input.
+    }
+    
+    
+    /*
+     - function that handles repeated search
+     - prompts the user to see if they want search for more restaurants with different postcode
+     - converts user input to lowercase to ensure it is case-sensitive
+     */
+    
+    func handling_search_repeat(indent_title: String) {
+        let user_Response = self.prompt_User("❔ Would you like to search for Restaurants with a different postcode?  [yes/y] or [no/n]").lowercased()//makesure whatever the yes or no is turned lowercase
+                                             
+        //comparing user's inputted response for yes or y to have another prompt input & no or n to end program.)
+        if user_Response == "y" || user_Response == "yes"{
+            let new_Postal_Code = self.prompt_User("\n❔Please enter a different Postcode")
+            //restarts the start function with new postcode
+            self.start(postal_code: new_Postal_Code)
+            
+        }else {
+            print("\n \(indent_title)Thank you for using the Restaurants Finder\n \n\(indent_title)🛠️ Ending Program...")
+            //stops current RunLoop to end the asynchronous program.
+            CFRunLoopStop(CFRunLoopGetCurrent())
+            
+        }
     }
  
 
