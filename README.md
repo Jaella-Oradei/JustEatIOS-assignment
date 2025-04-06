@@ -1,5 +1,35 @@
 # JustEatIOS-assignment
-A swift-based console application that gets restaurant data from a provided API (https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/{postcode}) and outputs(displays) the first 10 restaurants based on a give postcode. For each restaurant it finds, the application outputs the restaurant name along with 3 key attributes (cuisine type, rating and address).
+    > A swift-based console application that gets restaurant data from a provided API (https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/{postcode}) and outputs(displays) the first 10 restaurants based on a give postcode. For each restaurant it finds, the application outputs the restaurant name along with 3 key attributes (cuisine type, rating and address).
+
+
+# How to clone & run:
+    - Reminders:
+    > Make sure you have the latest version of swift installed 
+    > Make sure you have the latest version of git downloaded
+    
+    Cloning:
+        > Open termnial and move into desktop repository by typing:
+            cd ~/Desktop (for MacOS).
+        > Then enter into the terminal:
+            - git clone https://github.com/Jaella-Oradei/JustEatIOS-assignment.git
+            - a new file should appear in your desktop under the name "JustEatIOS-assignment"
+        > Then move into the new folder directory by typing into terminal: 
+            - cd JustEatIOS-assignment
+    
+    Running the program: 
+        > Compile all the files in terminal:
+            > swiftc *.swift 
+            > ./main.swift
+        > The restaurant finder program  will run: 
+                                                           🛠️  Program has started... 🛠️
+
+                                *********************************************************************** 
+
+                                                    🧾 Restaurants Finder 🧾 
+        
+        and that is how you will know thr program has begun running
+    
+
 
 #Assessment criteria outline:
     > The Problem:
@@ -23,19 +53,6 @@ A swift-based console application that gets restaurant data from a provided API 
         - Please ensure you use SWIFT to complete this task as we are keen to assess your
             current abilities in this language.
         
-
-
-
-# How to run:
-    > Make sure you have the latest version of swift installed 
-    > Clone the repository at: 
-        > git clone https://github.com/Jaella-Oradei/JustEatIOS-assignment.git
-        
-    > Running the program:
-    > Compile all the files:
-        > swiftc *.swift > ./main.swift
-    > The restaurant finder program should run and output
-    
     
 # When done running:
     - close program at: 

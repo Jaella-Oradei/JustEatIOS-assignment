@@ -22,7 +22,7 @@ class RestaurantFinder {
              
                     //checking to see if results are empty
                     guard !restaurants.isEmpty else {// !restaurants.isEmpty means the list is not empty
-                        print(" ❌ No restaurants were found for the postcode: \(postal_code)")//error message that postcode doesnt exist.
+                        print("❌ No restaurants were found for the postcode: \(postal_code)\n")//error message that postcode doesnt exist.
                         self.handling_search_repeat(indent_title: indent_title)//calls function to handle search repeats.
                         return //exists start() to run rest of the code.
                         
@@ -54,7 +54,7 @@ class RestaurantFinder {
                     
                     //if failed(API REQUEST), print the error message from localizedDescription
                 case .failure(let error):
-                    print(" 🚫 Error \(error.localizedDescription)")
+                    print("🚫 Error \(error.localizedDescription)\n")
                 }
             CFRunLoopStop(CFRunLoopGetCurrent())//Stop current run loop to end the asynchronous execution
             }
@@ -65,7 +65,7 @@ class RestaurantFinder {
     func fetching_Restaurants(postcode: String, completion: @escaping (Result<[Restaurant], Error>) -> Void) {
         let url_string = "https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/\(postcode)"// url link path being set as url_string
         guard let url = URL(string: url_string) else {//trying to create valid url object from url_string given.
-            let URL_Error = NSError(domain: "🚫 Error URL Domain", code: 01, userInfo: [NSLocalizedDescriptionKey: "URL: \(url_string) not valid."])// if url_string is not valid, outout error message(custom) with NSError function. Code: 0 as first error message
+            let URL_Error = NSError(domain: "🚫 Error URL Domain", code: 01, userInfo: [NSLocalizedDescriptionKey: "URL: \(url_string) not valid.\n"])// if url_string is not valid, outout error message(custom) with NSError function. Code: 0 as first error message
             completion(.failure(URL_Error))//completion closure with a failure result as url not valid
             return//exit function
         }
@@ -79,7 +79,7 @@ class RestaurantFinder {
             
            //retrieving data from the server
             guard let raw_Data = data else {
-                let data_Error = NSError(domain: "Error Session Data", code: 02, userInfo: [NSLocalizedFailureErrorKey: "❌ Data was not recived unfortunately, Please check JSON formatting"])// if the data is not present, error message with NSError and error code token 02 as its seconf error message- used NSLocalizedFailureErrorKey for more description on error
+                let data_Error = NSError(domain: "Error Session Data", code: 02, userInfo: [NSLocalizedFailureErrorKey: "❌ Data was not recived unfortunately, Please check JSON formatting\n"])// if the data is not present, error message with NSError and error code token 02 as its seconf error message- used NSLocalizedFailureErrorKey for more description on error
                 completion(.failure(data_Error))//calls to completion of failure then stops running
                 return
             }
@@ -192,21 +192,25 @@ class RestaurantFinder {
      */
     
     func handling_search_repeat(indent_title: String) {
-        let user_Response = self.prompt_User("❔ Would you like to search for Restaurants with a different postcode?  [yes/y] or [no/n]").lowercased()//makesure whatever the yes or no is turned lowercase
-                                             
-        //comparing user's inputted response for yes or y to have another prompt input & no or n to end program.)
-        if user_Response == "y" || user_Response == "yes"{
-            let new_Postal_Code = self.prompt_User("\n❔Please enter a different Postcode")
-            //restarts the start function with new postcode
-            self.start(postal_code: new_Postal_Code)
+        
+        while true { //while loop to ensure the prompt is asked until conditions allow for next stage
+            let user_Response = self.prompt_User("❔ Would you like to search for Restaurants with a different postcode?  [yes/y] or [no/n]").lowercased()//makesure whatever the yes or no is turned lowercase
             
-        }else {
-            print("\n \(indent_title)Thank you for using the Restaurants Finder\n \n\(indent_title)🛠️ Ending Program...")
-            //stops current RunLoop to end the asynchronous program.
-            CFRunLoopStop(CFRunLoopGetCurrent())
-            
+            //comparing user's inputted response for yes or y to have another prompt input & no or n to end program.)
+            if user_Response == "y" || user_Response == "yes"{
+                let new_Postal_Code = self.prompt_User("\n❔Please enter a different Postcode")
+                //restarts the start function with new postcode
+                self.start(postal_code: new_Postal_Code)
+                return //returns means that after the loop has restarted, you dont remain in current function and loop
+            } else if user_Response == "n" || user_Response == "no"{
+                print("\n \(indent_title)Thank you for using the Restaurants Finder\n \n\(indent_title)🛠️ Ending Program...")
+                //stops current RunLoop to end the asynchronous program.
+                CFRunLoopStop(CFRunLoopGetCurrent())
+                return//returns means that after the loop has restarted, you dont remain in current function and loop
+                
+            }else {
+                print("\n❌ Invalid input answer. \n ")//to let users know that they have entered the wrong input to the prompt, thus nothing happened.
+            }
         }
     }
- 
-
 }
