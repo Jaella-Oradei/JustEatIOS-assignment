@@ -21,11 +21,12 @@
             > swiftc *.swift 
             > ./main.swift
         > The restaurant finder program  will run: 
-                                                           🛠️  Program has started... 🛠️
+        
+               🛠️  Program has started... 🛠️
 
-                                *********************************************************************** 
+*********************************************************************** 
 
-                                                    🧾 Restaurants Finder 🧾 
+                 🧾 Restaurants Finder 🧾 
         
         and that is how you will know thr program has begun running
     
@@ -66,7 +67,8 @@
     > Please when you open the .txt file, make sure you open it fully or half of your screen for the best view of the file.
     > console is a view of what the .txt file is going to look like.
 
-#Assumptions:
+# Assumptions:
+
     1. An assumptiong I had was regarding the displaying of the information. Readability was prioritiesed to ensure that the displayed restaurant information is udnerstood by the reader. Splitting it into self containers and having each restaurant information named allows the user to understand which restaurant information they are reading as well as knowing exactly what is going on at each stage of the program.
     
     2. Emojies are used to add more design and beauty to the program. 
