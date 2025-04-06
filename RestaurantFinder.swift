@@ -1,3 +1,5 @@
+
+//framework to provide set of essential classes, functions that arent included in swift and structs.
 import Foundation
 
 class RestaurantFinder {
